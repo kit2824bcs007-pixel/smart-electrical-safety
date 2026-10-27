@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { createSensor, deleteSensor, listSensors, sensorReadings, updateSensor, updateSimulation } from '../controllers/sensorController.js';
+const router = Router();
+router.get('/', listSensors);
+router.post('/', createSensor);
+router.get('/:id/readings', sensorReadings);
+router.put('/:id', updateSensor);
+router.delete('/:id', deleteSensor);
+router.patch('/:id/simulation', updateSimulation);
+export default router;

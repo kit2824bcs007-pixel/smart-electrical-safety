@@ -1,0 +1,24 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import sensorRoutes from './routes/sensorRoutes.js';
+import alertRoutes from './routes/alertRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import notFound from './middleware/notFound.js';
+import errorHandler from './middleware/errorHandler.js';
+
+export const app = express();
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((origin) => origin.trim());
+app.use(helmet());
+app.use(cors({ origin: allowedOrigins }));
+app.use(express.json({ limit: '32kb' }));
+app.get('/api/health', (_req,res) => res.json({ status:'ok',service:'GridGuard demo API',simulated:true,timestamp:new Date().toISOString() }));
+app.use('/api/dashboard',dashboardRoutes);
+app.use('/api/sensors',sensorRoutes);
+app.use('/api/alerts',alertRoutes);
+app.use('/api/reports',reportRoutes);
+app.use('/api/settings',settingsRoutes);
+app.use(notFound);
+app.use(errorHandler);
